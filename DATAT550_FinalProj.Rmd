@@ -1,0 +1,52 @@
+---
+title: "DATA550 - Final Project"
+author: "Shizu Someya"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#Introduction
+
+#Dataset: Mobile Device Usage and User Behavior 
+
+##Mobile devices play a crucial role in daily life, influencing productivity and social interactions. The _Mobile Device Usage and User Behavior Dataset_ captures key metrics like screen-on time, app usage, and demographics. This analysis explores screen time patterns across age groups and gender to identify which group has the highest usage.
+
+Load Dataset
+```{r load-data, here-i-am, echo = FALSE}
+library(tidyverse)
+library(here)
+
+#Load data
+data_path <- here("DS", "user_behavior_dataset.csv")
+data <- read.csv("user_behavior_dataset.csv")
+
+#See preview of dataset
+head(data)
+```
+
+Analysis Table
+```{r data-table, echo = FALSE}
+#Average Screen Time by Age Group and Gen
+
+screen_time_table <- data %>% 
+  group_by(Age, Gender) %>% 
+  summarise(avg_screen_time = mean(Screen.On.Time..hours.day., na.rm = TRUE))
+
+print(screen_time_table)
+```
+The table above provides a simple inight into the average screen-on time across different age groups and gender. 
+
+Visual of Analysis
+```{r screen-time-graph, echo = FALSE}
+library(ggplot2)
+
+#Graph of screen time distribution 
+ggplot(data, aes(x = Age, y = Screen.On.Time..hours.day., fill = Gender)) + geom_boxplot() +
+  labs(title = "Screen Time Distribution by Age Group and Gender",
+       x = "Age",
+       y = "Screen-On Time")
+
+```
+
+This boxplot visualizes the distribution of screen time across age groups while distinguishing between male and female mobile device users. They have similar median screen time, with females having slightly higher variation compared to males. Some users have a significantly higher screen time which is seen in the whiskers of the boxplot. However, the distribution is relatively consistent across age groups. 
+
